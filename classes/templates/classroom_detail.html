@@ -7,9 +7,47 @@
   </div>
   <div class="card-body">
     <h5 class="card-title" style="color: 000034;">{{classroom.name}} {{classroom.subject}}</h5>
-    <p class="card-text" style="color: 000034;">{{classroom.year}}</p>
+    <p class="card-text" style="color: 000034;">Year: {{classroom.year}}</p>
+  	
+  	<form action="{% url 'add-student' %}" method="POST" enctype="multipart/form-data">
+  
+<table class="table">    	
+
+  <thead class="thead-dark">
+    
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Grade</th>
+
+      <th scope="col">Update</th>
+      <th scope="col">Delete</th>
+
+  </thead>
+  <tbody>
+  	{% for student in classroom.students.all %}
+    <tr>
+      <th scope="row">1</th>
+      <td>{{student.name}}</td>
+      <td>{{student.exam_grade}}</td>
+      {% if request.user == classroom.teacher %}
+      <td><a href="{% url 'student-update' student.id %}" class="btn" style="background-color: #000034; color: white;">Update</a></td>
+      <td><a href="{% url 'confirm-delete' student.id %}" class="btn" style="background-color: #FFA500; color: #000034;">Delete</a></td>
+     {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody> 
+  
+
+</table>
+
+</form>
+		{% if request.user == classroom.teacher %}
     <a href="{% url 'classroom-update' classroom.id %}" class="btn" style="background-color: #000034; color: white;">Update</a>
-    <a href="{% url 'classroom-delete' classroom.id %}" class="btn" style="background-color: #FFA500; color: #000034;">Delete</a>
+
+
+       <a href="{% url 'add-student' %}" class="btn" style="background-color: #000034; color: white;">Add Student</a>
+       <a href="{% url 'classroom-delete' classroom.id %}" class="btn" style="background-color: #FFA500; color: #000034;">Delete</a>
+		{% endif %}
   </div>
 </div>
 
